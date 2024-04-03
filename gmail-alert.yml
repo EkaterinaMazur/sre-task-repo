@@ -7,15 +7,21 @@ alertmanagerFiles:
     - name: 'gmail-notifications'
       email_configs:
       - to: example@gmail.com 
-        from: example@gmail.com # Update your from mail id here
+        from: example@gmail.com # Update this with your Gmail email address
         smarthost: smtp.gmail.com:587
-        auth_username: example@gmail.com # Update your from mail id here
-        auth_identity: example@gmail.com # Update your from mail id here
-        auth_password: password # Update your app-password here
+        auth_username: example@gmail.com # Update this with your Gmail email address
+        auth_identity: example@gmail.com # Update this with your Gmail email address
+        auth_password: password # Update this with your Gmail app password
         send_resolved: true
         headers:
-          subject: " Prometheus -  Alert  "
-        text: "{{ range .Alerts }} Hi, \n{{ .Annotations.summary }}  \n {{ .Annotations.description }} {{end}} "
+          subject: "Prometheus Alert - {{ .Status | toUpper }}"
+        text: "{{ range .Alerts }}Hi, 
+Alert Name: {{ .Labels.alertname }}
+Status: {{ .Status | toUpper }}
+Severity: {{ .Labels.severity }}
+Summary: {{ .Annotations.summary }}
+Description: {{ .Annotations.description }}
+{{ end }}"
 
     route:
       group_wait: 10s
